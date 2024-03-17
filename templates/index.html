@@ -15,8 +15,11 @@
         <img src="" alt="Choose an Image" id="previewImg">
     </div>
     <input type="file" name="image" id="fileInput" accept="image/*">
-    <label for="fileInput">Choose Image</label>
-    <button type="submit">Upload</button>
+    <div class="row">
+    <label for="fileInput" class="glass">Choose Image</label>
+    <button type="submit" class="glass">Upload</button>
+</div>
 </form>
+<h3 id="loading_message" style="display: none;">Please hold on while we generate your Image Shares...</h3>
 </div>
 {% endblock %}

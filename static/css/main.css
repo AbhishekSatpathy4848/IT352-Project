@@ -1,4 +1,4 @@
-h1, h2 {
+h1, h2, h3 {
     color: rgba(255, 255, 255, 0.85);
 }
 
@@ -11,11 +11,22 @@ h2 {
     margin-top: 0rem;
 }
 
+h3 {
+    margin-top: 4rem;
+}
+
 .column {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
 }
 
 body {
@@ -47,10 +58,13 @@ form {
     max-width: 100%;
     max-height: 100%;
     color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
 }
+
 input[type="file"] {
     display: none;
 }
+
 label, button {
     background-color: #4CAF50;
     color: rgba(255, 255, 255, 0.85);
@@ -88,4 +102,23 @@ body {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
+}
+
+.glass{
+    background: linear-gradient(
+    180deg,
+    rgba(217, 217, 217, 0.1),
+    rgba(217, 217, 217, 0.05)
+    );
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 1.5rem;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+button {
+    border-radius: 0px;
+    border: none;
 }
