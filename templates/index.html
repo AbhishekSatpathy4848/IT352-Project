@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>IT-352 Course Project</title>
+{% endblock %}
+
+{% block body %}
+<div class="column">
+<div class="column">
+<h1>Extended Visual Cryptography</h1>
+<h2>IT-352 Mini Project</h2>
+</div>
+<form id="uploadForm">
+    <div id="imagePreview">
+        <img src="" alt="Choose an Image" id="previewImg">
+    </div>
+    <input type="file" name="image" id="fileInput" accept="image/*">
+    <label for="fileInput">Choose Image</label>
+    <button type="submit">Upload</button>
+</form>
+</div>
+{% endblock %}
