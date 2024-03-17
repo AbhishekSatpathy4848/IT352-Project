@@ -40,7 +40,7 @@ def upload():
     return jsonify(data);
 
 def generate_image_shares(input_image_path):
-    # evcs_encrypt(vc_scheme, resolution, input_image_path, "visual_cryptography/output_files", "visual_cryptography/cover_imgs", cover_imgs)
+    evcs_encrypt(vc_scheme, resolution, input_image_path, "visual_cryptography/output_files", "visual_cryptography/cover_imgs", cover_imgs)
     data = {"image_shares" : []}
     for i in range(vc_scheme[1]):
         image_string = ""
