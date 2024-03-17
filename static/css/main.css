@@ -74,13 +74,13 @@ label, button {
 }
 
 body {
-    background: linear-gradient(270deg, #9b15e6, #e60fb8, #6022dd);
+    background: linear-gradient(270deg, #e615c0c7, #eb4d4d, #bb22dd);
     background-size: 600% 600%;
 
-    -webkit-animation: AnimationName 30s ease infinite;
-    -moz-animation: AnimationName 30s ease infinite;
-    -o-animation: AnimationName 30s ease infinite;
-    animation: AnimationName 30s ease infinite;
+    -webkit-animation: AnimationName 5s ease infinite;
+    -moz-animation: AnimationName 5s ease infinite;
+    -o-animation: AnimationName 5s ease infinite;
+    animation: AnimationName 5s ease infinite;
 }
 
 @-webkit-keyframes AnimationName {

@@ -27,18 +27,19 @@ document.getElementById("uploadForm").onsubmit = async function(e) {
     document.getElementById("loading_message").style.display = "block";
     let response = await post_image_to_endpoint(imageDataUrl, "/upload");
     document.getElementById("loading_message").style.display = "none";
-
+    response = await response.blob();
     console.log(response);
 };
 
-async function post_image_to_endpoint(image_data, endpoint){
+async function post_image_to_endpoint(imageDataUrl, endpoint){
+    let base64Image = imageDataUrl.split(',').pop();
     let options = {
         method: 'POST',
-        body: JSON.stringify({"image_data": imageDataUrl}),
+        body: JSON.stringify({"image_data": base64Image}),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
     }
-    let response = await fetch("/upload", options);
+    let response = await fetch(endpoint, options);
     return response;
 }
