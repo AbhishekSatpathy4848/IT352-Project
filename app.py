@@ -1,9 +1,13 @@
 import base64, binascii
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response, jsonify
 import json;
+from visual_cryptography.color_hvc import evcs_decrypt, evcs_encrypt
 
 app = Flask(__name__)
 
+vc_scheme = (3, 4)
+resolution = (128, 128)
+cover_imgs = ["Lena.png", "Baboon.png", "Barbara.bmp", "House.bmp"]
 
 def decode_base_64(image_data):
     try:
@@ -32,16 +36,38 @@ def index():
 def upload(): 
     image = decode_base_64(request.json["image_data"]);
     save_image(image, "uploaded_image.png");
-    # image = get_image();
-    return Response(status=200);
+    data = generate_image_shares("uploaded_image.png");
+    return jsonify(data);
 
-# def get_image():
-#     base64_string = ""
-#     with open("uploaded_image.png", "rb") as f:
-#         base64_string = base64.b64encode(f.read())
-#     print(base64_string)
-#     return base64_string
+def generate_image_shares(input_image_path):
+    # evcs_encrypt(vc_scheme, resolution, input_image_path, "visual_cryptography/output_files", "visual_cryptography/cover_imgs", cover_imgs)
+    data = {"image_shares" : []}
+    for i in range(vc_scheme[1]):
+        image_string = ""
+        with open(f"visual_cryptography/output_files/shares_{i}.png", "rb") as f:
+            image_string = base64.b64encode(f.read()).decode('utf-8')
+            image_string = "data:image/png;base64," + image_string
+            data["image_shares"].append(image_string)
+  
+    return data;
+
+@app.route("/decode", methods=["GET"])
+def decode_image_shares(image_shares):
+    evcs_decrypt("visual_cryptography/output_files", "final_image.png", vc_scheme, resolution)
+    image_string = ""
+    with open(f"visual_cryptography/final_image.png", "rb") as f:
+            image_string = base64.b64encode(f.read()).decode('utf-8')
+            image_string = "data:image/png;base64," + image_string
+            image_string = image_string
+    return jsonify({"decoded_image", image_string})
+
+@app.route("/verify", methods=["POST"])
+def verify():
+    image_shares = request.json["image_shares"]
+    image_shares = decode_image_shares(image_shares)
+    image_shares = [encode_base_64(image_share) for image_share in image_shares]
+    return Response(json.dumps({"image_shares": image_shares}), status=200, mimetype="application/json");
 
 if __name__  == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)
 

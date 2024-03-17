@@ -27,8 +27,27 @@ document.getElementById("uploadForm").onsubmit = async function(e) {
     document.getElementById("loading_message").style.display = "block";
     let response = await post_image_to_endpoint(imageDataUrl, "/upload");
     document.getElementById("loading_message").style.display = "none";
-    response = await response.blob();
-    console.log(response);
+    response = await response.json();
+    img_sources = response["image_shares"];
+    for (let i = 0; i < img_sources.length; i++){
+        let img = document.createElement("img");
+        img.src = img_sources[i];
+        img.className = "img-share";
+        document.getElementById("image-shares").appendChild(img);
+    }
+    //add a decode button as well
+    let decodeButton = document.createElement("button");
+    decodeButton.className = "decode-button";
+    decodeButton.className = "glass";
+    decodeButton.innerText = "Decode";
+    document.getElementById("main").appendChild(decodeButton)
+    document.getElementsByClassName("decode-button")[0].onclick = async function(){
+        let response = await fetch("/decode");
+        response = await response.json();
+        let decodedMessage = response["decoded_image"];
+        console.log(decodedMessage)
+        // document.getElementById("decoded-message").innerText = decodedMessage;
+    }
 };
 
 async function post_image_to_endpoint(imageDataUrl, endpoint){
