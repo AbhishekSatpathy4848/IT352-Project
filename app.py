@@ -135,7 +135,7 @@ def is_similar(img_1_file, img_2_file):
 
     print(similarity[0])
     
-    if similarity[0] > 0.4:
+    if similarity[0] > 0.7:
         return (True, similarity[0])
     else:
         return (False, similarity[0])
