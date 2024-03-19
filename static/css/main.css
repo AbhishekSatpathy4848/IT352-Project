@@ -146,10 +146,15 @@ button {
     border: none;
 }
 
-/* .img-share {
+.img-share {
     border-radius: 20px;
     object-fit: cover;
-} */
+    max-width: 40%;
+}
+
+img{
+    max-width: 30vw;
+}
 
 #image-shares{
     margin: 2rem;

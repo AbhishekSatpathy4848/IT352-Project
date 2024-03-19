@@ -36,6 +36,7 @@ document.getElementById("uploadForm").onsubmit = async function(e) {
         response = await response.json();
         console.log(response);
         let verified = response["verified"];
+        let similarity_score = response["similarity_score"];
         let uploaded_image = response["uploaded_image"];
         let decoded_image = response["decoded_image"];
         let uploaded_image_element = document.createElement("img");
@@ -72,9 +73,9 @@ document.getElementById("uploadForm").onsubmit = async function(e) {
 
 
         if(verified){
-            alert("Verified!");
+            alert(`Verified with Similarity Score ${similarity_score}`);
         } else {
-            alert("Not Verified!");
+            alert(`Not verified with Similarity Score ${similarity_score}`);
         }
         return;
     }
@@ -118,8 +119,6 @@ document.getElementById("uploadForm").onsubmit = async function(e) {
         decodeButton.style.display = "none";
         let submitButton = document.getElementById('submitButton');
         submitButton.innerHTML = "Verify";
-        document.getElementById("previewImg").src = "";
-        imageDataUrl = ""
     }
     
     document.getElementById("main").appendChild(decodeButton);
