@@ -149,11 +149,8 @@ button {
 .img-share {
     border-radius: 20px;
     object-fit: cover;
-    max-width: 40%;
-}
-
-img{
-    max-width: 30vw;
+    width: 384px;
+    height: 256px;
 }
 
 #image-shares{
