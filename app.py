@@ -83,7 +83,6 @@ def verify():
         verify_image = "data:image/png;base64," + verify_image
 
     result = True
-    print(verify_image)
     return jsonify({"verified": result, "original_image": original_image, "decoded_image": verify_image});
 
 if __name__  == "__main__":
