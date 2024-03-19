@@ -26,34 +26,38 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById("uploadForm").onsubmit = async function(e) {
     e.preventDefault();
 
+    if(!imageDataUrl){
+        alert("Please upload an image");
+        return;
+    }
+
     if(document.getElementById('submitButton').innerHTML == "Verify"){
         let response = await post_image_to_endpoint(imageDataUrl, "/verify");
         response = await response.json();
         console.log(response);
         let verified = response["verified"];
-        let original_image = response["original_image"];
-        let verified_image = response["decoded_image"];
-        let original_image_element = document.createElement("img");
-        original_image_element.src = original_image;
-        original_image_element.className = "img-share";
-        let verified_image_element = document.createElement("img");
-        verified_image_element.src = verified_image;
-        verified_image_element.className = "img-share";
-        //wrap in horizontal flexbox
+        let uploaded_image = response["uploaded_image"];
+        let decoded_image = response["decoded_image"];
+        let uploaded_image_element = document.createElement("img");
+        uploaded_image_element.src = uploaded_image;
+        uploaded_image_element.className = "img-share";
+        let decoded_image_element = document.createElement("img");
+        decoded_image_element.src = decoded_image;
+        decoded_image_element.className = "img-share";
         let div = document.createElement("div");
         div.className = "row-flex";
         let h2 = document.createElement("h2");
-        h2.innerText = "Original Image";
+        h2.innerText = "Uploaded Image";
         h2.className = "generated-title";
         let div_1 = document.createElement("div");
         div_1.appendChild(h2);
-        div_1.appendChild(original_image_element);
+        div_1.appendChild(uploaded_image_element);
         h2 = document.createElement("h2");
         h2.innerText = "Decoded Image";
         h2.className = "generated-title";
         let div_2 = document.createElement("div");
         div_2.appendChild(h2);
-        div_2.appendChild(verified_image_element);
+        div_2.appendChild(decoded_image_element);
 
         div_1.style.display = "flex";
         div_1.style.flexDirection = "column";
@@ -112,13 +116,12 @@ document.getElementById("uploadForm").onsubmit = async function(e) {
         document.getElementById("main").appendChild(h2);
         document.getElementById("main").appendChild(img);
         decodeButton.style.display = "none";
-
         let submitButton = document.getElementById('submitButton');
         submitButton.innerHTML = "Verify";
-
-
-
+        document.getElementById("previewImg").src = "";
+        imageDataUrl = ""
     }
+    
     document.getElementById("main").appendChild(decodeButton);
 };
 

@@ -18,7 +18,13 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+}
 
+.project-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
 }
 
 h1, h2, h3 {
@@ -140,10 +146,10 @@ button {
     border: none;
 }
 
-.img-share {
+/* .img-share {
     border-radius: 20px;
     object-fit: cover;
-}
+} */
 
 #image-shares{
     margin: 2rem;
@@ -162,4 +168,11 @@ decode-button {
 
 #generated-title {
     margin-top: 4rem;
+}
+
+footer {
+    margin-top: 5rem;
+    color: rgba(255, 255, 255, 0.85);    
+    font-weight: 600;
+    font-size: 1.2rem;
 }

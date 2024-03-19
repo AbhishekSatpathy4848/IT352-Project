@@ -8,8 +8,11 @@
 
     {% block head %}{% endblock %}
 </head>
-<body>
+<body style="display: flex; flex-direction: column; align-items: center;">
     {% block body %}{% endblock %}
     <script src="{{url_for('static', filename='js/main.js')}}"></script>
+    <footer>
+        <p class="made-by font-weight-med white">Made with 🤍 by Abhishek Satpathy, Vignaraj and Srinivas</p>
+    </footer>
 </body>
 </html>

@@ -83,15 +83,12 @@ def decrypt(img_shares):
     for image in img_shares:
         cmy_recover |= (conver_rgb_cmy(image) // 255).astype(bool)
     cmy_recover = cmy_recover.astype(np.uint8) * 255
-    print(cmy_recover.shape)
     return conver_rgb_cmy(cmy_recover)
 
 
 def evcs_encrypt(vc_scheme: tuple, resolution: tuple, input_file: str, output_file_dir: str, cover_imgs_dir: str, cover_img_names: list):
     img_inputs = [cv2.imread(os.path.join(cover_imgs_dir, ifn)) for ifn in cover_img_names]
     img_inputs = img_inputs[:vc_scheme[1]]
-    print("sfsafd")
-    print(os.listdir(cover_imgs_dir))
     img_shares = None
 
     if input_file:

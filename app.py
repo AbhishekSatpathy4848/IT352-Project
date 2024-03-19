@@ -40,7 +40,7 @@ def upload():
     return jsonify(data);
 
 def generate_image_shares(input_image_path):
-    # evcs_encrypt(vc_scheme, resolution, input_image_path, "visual_cryptography/output_files", "visual_cryptography/cover_imgs", cover_imgs)
+    evcs_encrypt(vc_scheme, resolution, input_image_path, "visual_cryptography/output_files", "visual_cryptography/cover_imgs", cover_imgs)
     data = {"image_shares" : []}
     for i in range(vc_scheme[1]):
         image_string = ""
@@ -64,26 +64,26 @@ def decode_image_shares():
     return jsonify(data);
 
 
-def verify_image():
-    return True
+def verify_image_function():
+        return True
 
 @app.route("/verify", methods=["POST"])
 def verify():
     image = decode_base_64(request.json["image_data"]);
     save_image(image, "uploaded_image_to_verify.png");
-    original_image = ""
+    uploaded_image = ""
 
-    with open(f"uploaded_image.png", "rb") as f:
-        original_image = base64.b64encode(f.read()).decode('utf-8')
-        original_image = "data:image/png;base64," + original_image
-    verify_image = ""
-    
     with open(f"uploaded_image_to_verify.png", "rb") as f:
-        verify_image = base64.b64encode(f.read()).decode('utf-8')
-        verify_image = "data:image/png;base64," + verify_image
+        uploaded_image = base64.b64encode(f.read()).decode('utf-8')
+        uploaded_image = "data:image/png;base64," + uploaded_image
+    
+    decoded_image = ""
+    with open(f"visual_cryptography/final_image.png", "rb") as f:
+        decoded_image = base64.b64encode(f.read()).decode('utf-8')
+        decoded_image = "data:image/png;base64," + decoded_image
 
-    result = True
-    return jsonify({"verified": result, "original_image": original_image, "decoded_image": verify_image});
+    result = verify_image_function()
+    return jsonify({"verified": result, "uploaded_image": uploaded_image, "decoded_image": decoded_image});
 
 if __name__  == "__main__":
     app.run(debug=True)
