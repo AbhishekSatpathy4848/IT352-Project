@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block body %}
+<div id="particles-js"></div>
 <div class="column" id="main">
 <div class="column">
 <h1>Extended Visual Cryptography</h1>
@@ -17,11 +18,10 @@
     <input type="file" name="image" id="fileInput" accept="image/*">
     <div class="row">
     <label for="fileInput" class="glass">Choose Image</label>
-    <button type="submit" class="glass">Upload</button>
+    <button type="submit" id="submitButton" class="glass">Upload</button>
 </div>
 </form>
 <h3 id="loading_message" style="display: none;">Please hold on while we generate your Image Shares...</h3>
-<div id="image-shares"></div>
 <div></div>
 </div>
 {% endblock %}

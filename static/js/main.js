@@ -1,9 +1,5 @@
 let imageDataUrl;
 
-document.addEventListener('DOMContentLoaded', function() {
-    // document.getElementById('loading_message').style.display = "none";
-})
-
 document.getElementById("fileInput").onchange = function() {
     var previewImg = document.getElementById('previewImg');
     var file = document.querySelector('input[type=file]').files[0];
@@ -21,33 +17,109 @@ document.getElementById("fileInput").onchange = function() {
     }
 };
 
+document.addEventListener('DOMContentLoaded', function() {
+    particlesJS.load('particles-js', "static/assets/particles-js-config.json", function() {
+    console.log('callback - particles.js config loaded');
+  });
+});
+
 document.getElementById("uploadForm").onsubmit = async function(e) {
     e.preventDefault();
 
+    if(document.getElementById('submitButton').innerHTML == "Verify"){
+        let response = await post_image_to_endpoint(imageDataUrl, "/verify");
+        response = await response.json();
+        console.log(response);
+        let verified = response["verified"];
+        let original_image = response["original_image"];
+        let verified_image = response["decoded_image"];
+        let original_image_element = document.createElement("img");
+        original_image_element.src = original_image;
+        original_image_element.className = "img-share";
+        let verified_image_element = document.createElement("img");
+        verified_image_element.src = verified_image;
+        verified_image_element.className = "img-share";
+        //wrap in horizontal flexbox
+        let div = document.createElement("div");
+        div.className = "row-flex";
+        let h2 = document.createElement("h2");
+        h2.innerText = "Original Image";
+        h2.className = "generated-title";
+        let div_1 = document.createElement("div");
+        div_1.appendChild(h2);
+        div_1.appendChild(original_image_element);
+        h2 = document.createElement("h2");
+        h2.innerText = "Decoded Image";
+        h2.className = "generated-title";
+        let div_2 = document.createElement("div");
+        div_2.appendChild(h2);
+        div_2.appendChild(verified_image_element);
+
+        div_1.style.display = "flex";
+        div_1.style.flexDirection = "column";
+        div_2.style.display = "flex";
+        div_2.style.flexDirection = "column";
+        div_1.style.alignItems = "center";
+        div_2.style.alignItems = "center";
+        div.appendChild(div_1);
+        div.appendChild(div_2);
+        div.style.width = "100%";
+        document.getElementById("main").appendChild(div);
+
+
+        if(verified){
+            alert("Verified!");
+        } else {
+            alert("Not Verified!");
+        }
+        return;
+    }
     document.getElementById("loading_message").style.display = "block";
     let response = await post_image_to_endpoint(imageDataUrl, "/upload");
     document.getElementById("loading_message").style.display = "none";
+    let h2 = document.createElement("h2");
+    h2.innerText = "Generated Image Shares";
+    h2.className = "generated-title";
+    document.getElementById("main").appendChild(h2);
     response = await response.json();
     img_sources = response["image_shares"];
+    let images_shares_div = document.createElement("div");
+    images_shares_div.id = "image-shares";
+    document.getElementById("main").appendChild(images_shares_div);
     for (let i = 0; i < img_sources.length; i++){
         let img = document.createElement("img");
         img.src = img_sources[i];
         img.className = "img-share";
         document.getElementById("image-shares").appendChild(img);
     }
-    //add a decode button as well
     let decodeButton = document.createElement("button");
     decodeButton.className = "decode-button";
     decodeButton.className = "glass";
     decodeButton.innerText = "Decode";
-    document.getElementById("main").appendChild(decodeButton)
-    document.getElementsByClassName("decode-button")[0].onclick = async function(){
+    decodeButton.onclick = async function(){
         let response = await fetch("/decode");
         response = await response.json();
-        let decodedMessage = response["decoded_image"];
-        console.log(decodedMessage)
-        // document.getElementById("decoded-message").innerText = decodedMessage;
+
+        let decodedImage = response["decoded_image"];
+        let img = document.createElement("img");
+
+        img.src = decodedImage;
+        img.className = "img-share";
+
+        let h2 = document.createElement("h2");
+        h2.innerText = "Decoded Image";
+        h2.className = "generated-title";
+        document.getElementById("main").appendChild(h2);
+        document.getElementById("main").appendChild(img);
+        decodeButton.style.display = "none";
+
+        let submitButton = document.getElementById('submitButton');
+        submitButton.innerHTML = "Verify";
+
+
+
     }
+    document.getElementById("main").appendChild(decodeButton);
 };
 
 async function post_image_to_endpoint(imageDataUrl, endpoint){
@@ -60,5 +132,6 @@ async function post_image_to_endpoint(imageDataUrl, endpoint){
         }
     }
     let response = await fetch(endpoint, options);
+    
     return response;
 }

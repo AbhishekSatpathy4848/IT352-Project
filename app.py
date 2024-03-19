@@ -40,7 +40,7 @@ def upload():
     return jsonify(data);
 
 def generate_image_shares(input_image_path):
-    evcs_encrypt(vc_scheme, resolution, input_image_path, "visual_cryptography/output_files", "visual_cryptography/cover_imgs", cover_imgs)
+    # evcs_encrypt(vc_scheme, resolution, input_image_path, "visual_cryptography/output_files", "visual_cryptography/cover_imgs", cover_imgs)
     data = {"image_shares" : []}
     for i in range(vc_scheme[1]):
         image_string = ""
@@ -52,21 +52,39 @@ def generate_image_shares(input_image_path):
     return data;
 
 @app.route("/decode", methods=["GET"])
-def decode_image_shares(image_shares):
-    evcs_decrypt("visual_cryptography/output_files", "final_image.png", vc_scheme, resolution)
+def decode_image_shares():
+    evcs_decrypt("visual_cryptography/output_files", "visual_cryptography/final_image.png", vc_scheme, resolution)
     image_string = ""
+    data = {}
     with open(f"visual_cryptography/final_image.png", "rb") as f:
             image_string = base64.b64encode(f.read()).decode('utf-8')
             image_string = "data:image/png;base64," + image_string
             image_string = image_string
-    return jsonify({"decoded_image", image_string})
+    data["decoded_image"] = image_string
+    return jsonify(data);
+
+
+def verify_image():
+    return True
 
 @app.route("/verify", methods=["POST"])
 def verify():
-    image_shares = request.json["image_shares"]
-    image_shares = decode_image_shares(image_shares)
-    image_shares = [encode_base_64(image_share) for image_share in image_shares]
-    return Response(json.dumps({"image_shares": image_shares}), status=200, mimetype="application/json");
+    image = decode_base_64(request.json["image_data"]);
+    save_image(image, "uploaded_image_to_verify.png");
+    original_image = ""
+
+    with open(f"uploaded_image.png", "rb") as f:
+        original_image = base64.b64encode(f.read()).decode('utf-8')
+        original_image = "data:image/png;base64," + original_image
+    verify_image = ""
+    
+    with open(f"uploaded_image_to_verify.png", "rb") as f:
+        verify_image = base64.b64encode(f.read()).decode('utf-8')
+        verify_image = "data:image/png;base64," + verify_image
+
+    result = True
+    print(verify_image)
+    return jsonify({"verified": result, "original_image": original_image, "decoded_image": verify_image});
 
 if __name__  == "__main__":
     app.run(debug=True)
